@@ -8,7 +8,10 @@ from sys import stdin, stdout
 
 
 def main():
-    regex = re.compile("([\W_]*)([^\W_]+(?:'[^\W_]+)?)?", re.UNICODE)
+    regex = re.compile(
+        "([^[:alpha:]]*)([[:alpha:]]+(?:'[[:alpha:]]+)?)?",
+        re.UNICODE
+    )
 
     character_counts = defaultdict(int)
     bigram_counts = defaultdict(int)
