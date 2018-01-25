@@ -1,6 +1,6 @@
 import argparse
 import json
-import re
+import regex
 import textwrap
 from collections import defaultdict
 from itertools import chain
@@ -8,9 +8,9 @@ from sys import stdin, stdout
 
 
 def main():
-    regex = re.compile(
+    re = regex.compile(
         "([^[:alpha:]]*)([[:alpha:]]+(?:'[[:alpha:]]+)?)?",
-        re.UNICODE
+        regex.UNICODE
     )
 
     character_counts = defaultdict(int)
@@ -21,7 +21,7 @@ def main():
 
     word_count = 0
 
-    for match in chain.from_iterable(regex.finditer(line) for line in stdin):
+    for match in chain.from_iterable(re.finditer(line) for line in stdin):
         characters = match.group(1)
         word = match.group(2)
 
