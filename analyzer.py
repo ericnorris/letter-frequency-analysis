@@ -1,15 +1,17 @@
 import argparse
 import json
-import regex
+import string
 import textwrap
 from collections import defaultdict
 from itertools import chain
 from sys import stderr, stdin, stdout
 
+import regex
+
 
 def main():
     pattern = regex.compile(
-        "([^[:alpha:]]*)([[:alpha:]]+(?:'[[:alpha:]]+)?)?",
+        "\s*([^[:alpha:]\s]*)\s*([[:alpha:]]+(?:'[[:alpha:]]+)?)?",
         regex.UNICODE
     )
 
@@ -57,11 +59,6 @@ def main():
 
     # end for match in...
 
-    unwanted_keys = (key for key in "\n\r\t" if key in character_counts)
-
-    for unwanted_key in unwanted_keys:
-        del character_counts[unwanted_key]
-
     json.dump(
         {
             "word-count": word_count,
@@ -75,6 +72,8 @@ def main():
         indent=4,
         ensure_ascii=False
     )
+
+    stdout.flush()
 
     print(
         "Finished, processed {word_count} words.".format(word_count=word_count),
