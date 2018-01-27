@@ -4,11 +4,11 @@ import regex
 import textwrap
 from collections import defaultdict
 from itertools import chain
-from sys import stdin, stdout
+from sys import stderr, stdin, stdout
 
 
 def main():
-    re = regex.compile(
+    pattern = regex.compile(
         "([^[:alpha:]]*)([[:alpha:]]+(?:'[[:alpha:]]+)?)?",
         regex.UNICODE
     )
@@ -21,7 +21,7 @@ def main():
 
     word_count = 0
 
-    for match in chain.from_iterable(re.finditer(line) for line in stdin):
+    for match in chain.from_iterable(pattern.finditer(line) for line in stdin):
         characters = match.group(1)
         word = match.group(2)
 
@@ -29,14 +29,13 @@ def main():
             character_counts[char] += 1
 
         if word:
+            word = word.lower()
             word_count += 1
             last_index = len(word) - 1
         else:
             continue
 
         for index, letter in enumerate(word):
-            letter = letter.lower()
-
             character_counts[letter] += 1
 
             if index == 0:
@@ -58,7 +57,7 @@ def main():
 
     # end for match in...
 
-    unwanted_keys = (key for key in ['\t', '\n'] if key in character_counts)
+    unwanted_keys = (key for key in "\n\r\t" if key in character_counts)
 
     for unwanted_key in unwanted_keys:
         del character_counts[unwanted_key]
@@ -77,7 +76,10 @@ def main():
         ensure_ascii=False
     )
 
-    print("Finished, processed {word_count} words.".format(word_count=word_count))
+    print(
+        "Finished, processed {word_count} words.".format(word_count=word_count),
+        file=stderr
+    )
 
 
 if __name__ == '__main__':
@@ -91,7 +93,7 @@ if __name__ == '__main__':
               - character-counts
               - bigram-counts
               - trigram-counts
-              - letter-pos
+              - letter-positions
     """)).parse_args()
 
     main()
