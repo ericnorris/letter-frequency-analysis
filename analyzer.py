@@ -11,61 +11,77 @@ import regex
 
 def main():
     pattern = regex.compile(
-        "\s*([^[:alpha:]\s]*)\s*([[:alpha:]]+(?:'[[:alpha:]]+)?)?",
+        "(?<punct>[[:punct:]]+)|(?<word>(?:[a-zA-Z])+(?:'[a-zA-Z]+)?)|(?<number>[0-9]+)",
         regex.UNICODE
     )
 
-    character_counts = defaultdict(int)
+    letter_counts = defaultdict(int)
     bigram_counts = defaultdict(int)
     trigram_counts = defaultdict(int)
+    punctuation_counts = defaultdict(int)
+    number_counts = defaultdict(int)
 
     letter_pos = defaultdict(lambda: {"first": 0, "middle": 0, "last": 0})
 
     word_count = 0
 
     for match in chain.from_iterable(pattern.finditer(line) for line in stdin):
-        characters = match.group(1)
-        word = match.group(2)
+        punctuation = match.group("punct") or ""
+        word = (match.group("word") or "").lower()
+        number = match.group("number") or ""
 
-        for char in characters:
-            character_counts[char] += 1
+        if punctuation:
+            for character in punctuation:
+                punctuation_counts[character] += 1
 
-        if word:
-            word = word.lower()
-            word_count += 1
-            last_index = len(word) - 1
-        else:
             continue
 
-        for index, letter in enumerate(word):
-            character_counts[letter] += 1
+        if word:
+            word_count += 1
+            last_index = len(word) - 1
 
-            if index == 0:
-                letter_pos[letter]['first'] += 1
-            elif index == last_index:
-                letter_pos[letter]['last'] += 1
-            else:
-                letter_pos[letter]['middle'] += 1
+            for index, letter in enumerate(word):
+                if letter == "'":
+                    punctuation_counts["'"] += 1
+                else:
+                    letter_counts[letter] += 1
 
-            if index > 0:
-                bigram = word[index - 1:index + 1]
+                if index == 0:
+                    letter_pos[letter]['first'] += 1
+                elif index == last_index:
+                    letter_pos[letter]['last'] += 1
+                else:
+                    letter_pos[letter]['middle'] += 1
 
-                bigram_counts[bigram] += 1
+                if index > 0:
+                    bigram = word[index - 1:index + 1]
 
-            if index > 1:
-                trigram = word[index - 2:index + 1]
+                    bigram_counts[bigram] += 1
 
-                trigram_counts[trigram] += 1
+                if index > 1:
+                    trigram = word[index - 2:index + 1]
+
+                    trigram_counts[trigram] += 1
+
+            continue
+
+        if number:
+            for digit in number:
+                number_counts[digit] += 1
+
+            continue
 
     # end for match in...
 
     json.dump(
         {
             "word-count": word_count,
-            "character-counts": character_counts,
+            "letter-counts": letter_counts,
+            "letter-positions": letter_pos,
             "bigram-counts": bigram_counts,
             "trigram-counts": trigram_counts,
-            "letter-positions": letter_pos,
+            "punctuation-counts": punctuation_counts,
+            "number-counts": number_counts,
         },
         stdout,
         sort_keys=True,
@@ -89,10 +105,12 @@ if __name__ == '__main__':
             JSON output with the following keys:
 
               - word-count
-              - character-counts
+              - letter-counts
+              - letter-positions
               - bigram-counts
               - trigram-counts
-              - letter-positions
+              - punctuation-counts
+              - number-counts
     """)).parse_args()
 
     main()
