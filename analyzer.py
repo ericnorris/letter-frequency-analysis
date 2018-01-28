@@ -1,18 +1,18 @@
 import argparse
 import json
+import re
 import string
 import textwrap
 from collections import defaultdict
 from itertools import chain
 from sys import stderr, stdin, stdout
 
-import regex
-
 
 def main():
-    pattern = regex.compile(
-        "(?<punct>[[:punct:]]+)|(?<word>(?:[a-zA-Z])+(?:'[a-zA-Z]+)?)|(?<number>[0-9]+)",
-        regex.UNICODE
+    pattern = re.compile(
+        r"(?P<punct>[\x21-\x2f\x3a-\x40\x5b-\x60\x7b-\x7e]+)" +
+        r"|(?P<word>(?:[a-zA-Z])+(?:'[a-zA-Z]+)?)" +
+        r"|(?P<number>[0-9]+)"
     )
 
     letter_counts = defaultdict(int)
