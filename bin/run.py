@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-import src
+import lfa
 
 import argparse
 import pickle
@@ -19,17 +19,19 @@ def main():
 
     htmlgen_parser = subparsers.add_parser('htmlgen')
 
-    htmlgen_parser.add_argument('--input', required=True, type=argparse.FileType('r'))
+    htmlgen_parser.add_argument('--input', required=True, type=argparse.FileType('rb'))
     htmlgen_parser.add_argument('--outdir', required=True)
 
     arguments = parser.parse_args()
 
     if arguments.command == 'analyze':
-        result = src.analyze(arguments.input)
+        result = lfa.analyze(arguments.input)
 
         pickle.dump(result, arguments.output)
     elif arguments.command == 'htmlgen':
-        pass
+        counts = pickle.load(arguments.input)
+
+        lfa.htmlgen(counts, arguments.outdir)
 
 
 if __name__ == '__main__':
