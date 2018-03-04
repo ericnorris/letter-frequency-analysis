@@ -9,22 +9,25 @@
 
   <!-- TODO make this a static asset -->
   <link rel="stylesheet" href="https://gitcdn.link/repo/Chalarangelo/mini.css/master/dist/mini-lite.min.css">
+  <style type="text/css">
+    .monospace { font-family: monospace; }
+    .std-pd-top { padding-top: 20px; }
+  </style>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
 </head>
 <body>
   <div class="container">
     <div class="row col-sm-fluid col-md-6 col-md-offset-3">
       <article>
-        <h1>letter frequency analysis</h1>
+        <h1>Letter Frequency Analysis</h1>
 
-        <p>Below are the results from having analyzed the <a href="https://www.anc.org/data/oanc/">Open American National Corpus</a>, a "roughly 15 million word subset of the ANC Second Release that is unrestricted in terms of usage and redistribution." It consists of both spoken and written data from a variety of sources.</p>
+        <p>Below are the results from having analyzed {{ word_count }} words in the <a href="https://www.anc.org/data/oanc/">Open American National Corpus</a>, a "subset of the ANC Second Release that is unrestricted in terms of usage and redistribution." It consists of both spoken and written data from a variety of sources.</p>
 
-        <section>
-          <h2>Letter Frequency <em>including digits, punctuation, and space</em></h2>
+        <section class="std-pd-top">
+          <h2>Characters</h2>
 
-          <h3>Count</h3>
-          <div class="responsive-padding responsive-margin" style="position: relative">
-            <canvas id="letter-freq-all-symbols" height="550"></canvas>
+          <div class="responsive-margin" style="position: relative">
+            <canvas id="letter-freq-all-symbols" height="700"></canvas>
             <script type="text/javascript">
               var ctx = document.getElementById('letter-freq-all-symbols').getContext('2d');
               var chart = new Chart(ctx, {
@@ -43,17 +46,134 @@
 
                 options: {
                   legend: false,
-                  maintainAspectRatio: false
+                  layout: {
+                    padding: {
+                      left: 0,
+                      right: 10
+                    }
+                  },
+                  maintainAspectRatio: false,
+                  scales: {
+                    xAxes: [{
+                      type: 'linear'
+                    }]
+                  }
                 }
               });
             </script>
           </div>
 
-          <h3>Relative Frequency</h3>
-          <div class="responsive-padding responsive-margin" style="font-family: monospace;">
-            {% for freq_tuple in all_symbols_relative_freq %}
-              {{ freq_tuple[0] }}: {{ (freq_tuple[1]*100)|round(3) }}% <br>
-            {% endfor %}
+          <div class="row std-pd-top">
+            <div class="col-sm-fluid col-md-4">
+              <h3>Relative Frequency <small>all symbols</small></h3>
+              <div class="responsive-margin monospace">
+                {% for freq_tuple in all_symbols_relative_freq %}
+                  {{ freq_tuple[0] }}: {{ (freq_tuple[1]*100)|round(3) }}% <br>
+                {% endfor %}
+              </div>
+            </div>
+
+            <div class="col-sm-fluid col-md-4 col-md-offset-1">
+              <h3>Relative Frequency <small>letters only</small></h3>
+              <div class="responsive-margin monospace">
+                {% for freq_tuple in letters_relative_freq %}
+                  {{ freq_tuple[0] }}: {{ (freq_tuple[1]*100)|round(3) }}% <br>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="std-pd-top">
+          <h2>Punctuation</h2>
+          <div class="responsive-margin" style="position: relative">
+            <canvas id="punctuation-freq" height="700"></canvas>
+            <script type="text/javascript">
+              var ctx = document.getElementById('punctuation-freq').getContext('2d');
+              var chart = new Chart(ctx, {
+                // The type of chart we want to create
+                type: 'horizontalBar',
+
+                // The data for our dataset
+                data: {
+                  labels: [{% for count_tuple in punctuation_count_desc %}{{ count_tuple[0]|tojson }},{% endfor %}],
+                  datasets: [{
+                    label: "count",
+                    backgroundColor: 'rgba(2,119,189,0.9)',
+                    data: [{% for count_tuple in punctuation_count_desc %}{{ count_tuple[1] }},{% endfor %}],
+                  }]
+                },
+
+                options: {
+                  legend: false,
+                  maintainAspectRatio: false,
+                  layout: {
+                    padding: {
+                      left: -10,
+                      right: 10
+                    }
+                  }
+                }
+              });
+            </script>
+          </div>
+        </section>
+
+        <section class="std-pd-top">
+          <h2>Numbers</h2>
+          <div class="responsive-margin" style="position: relative">
+            <canvas id="number-freq" height="700"></canvas>
+            <script type="text/javascript">
+              var ctx = document.getElementById('number-freq').getContext('2d');
+              var chart = new Chart(ctx, {
+                // The type of chart we want to create
+                type: 'horizontalBar',
+
+                // The data for our dataset
+                data: {
+                  labels: [{% for count_tuple in number_count_desc %}"{{ count_tuple[0] }}",{% endfor %}],
+                  datasets: [{
+                    label: "count",
+                    backgroundColor: 'rgba(2,119,189,0.9)',
+                    data: [{% for count_tuple in number_count_desc %}{{ count_tuple[1] }},{% endfor %}],
+                  }]
+                },
+
+                options: {
+                  legend: false,
+                  maintainAspectRatio: false,
+                  layout: {
+                    padding: {
+                      left: -10,
+                      right: 10
+                    }
+                  }
+                }
+              });
+            </script>
+          </div>
+        </section>
+
+        <section class="std-pd-top">
+          <h2>N-grams</h2>
+          <div class="row std-pd-top">
+            <div class="col-sm-fluid col-md-4">
+              <h3>Bigrams</h3>
+              <div class="responsive-margin monospace">
+                {% for count_tuple in top_bigrams %}
+                  {{ count_tuple[0] }}: {{ count_tuple }} <br>
+                {% endfor %}
+              </div>
+            </div>
+
+            <div class="col-sm-fluid col-md-4 col-md-offset-1">
+              <h3>Trigrams</h3>
+              <div class="responsive-margin monospace">
+                {% for count_tuple in top_trigrams %}
+                  {{ count_tuple[0] }}: {{ count_tuple }} <br>
+                {% endfor %}
+              </div>
+            </div>
           </div>
         </section>
       </article>
