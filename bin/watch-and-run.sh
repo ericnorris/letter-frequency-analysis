@@ -1,11 +1,32 @@
 #!/bin/bash
 
-while output=$(inotifywait ./templates ./lfa); do
-    echo "Got event: $output"
+if ! [[ $1 ]] || ! [[ $2 ]]; then
+    echo "usage: $(basename "$0") <analysis-results> <output-directory>"
 
-    if [[ $output =~ "./lfa" ]]; then
-        pip install --upgrade . >/dev/null && echo "Updated module"
-    fi
+    exit 1
+fi
 
-    ./bin/run.py htmlgen --input $1 --outdir $2 && echo "Rendered templates"
-done
+
+main() {
+    log "Starting"
+
+    ./bin/run.py htmlgen --input $1 --outdir $2 && log "Initial template render"
+
+    while output=$(inotifywait ./templates ./lfa 2>/dev/null); do
+        log "Got event: $output"
+
+        if [[ $output =~ "./lfa" ]]; then
+            pip install --upgrade . >/dev/null && log "Updated module"
+        fi
+
+        ./bin/run.py htmlgen --input $1 --outdir $2 && log "Rendered templates"
+    done
+}
+
+
+log() {
+    echo "[$(date -u -R)]" "$@"
+}
+
+
+main "$@"
