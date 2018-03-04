@@ -61,12 +61,12 @@ def analyze(stream : TextIO) -> AnalysisResults:
             counts.numbers.update(number)
 
         elif space:
-            counts.all_symbols['space'] += 1
+            counts.all_symbols['[ ]'] += 1
 
     # end for match in...
 
     counts.all_symbols.update(counts.letters)
-    counts.all_symbols['punctuation'] = sum(counts.punctuation.values())
-    counts.all_symbols['numbers'] = sum(counts.numbers.values())
+    counts.all_symbols['[[:punct:]]'] = sum(counts.punctuation.values())
+    counts.all_symbols['[[:digit:]]'] = sum(counts.numbers.values())
 
     return counts
