@@ -1,16 +1,63 @@
 <!doctype html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="x-ua-compatible" content="ie=edge">
-        <title></title>
-        <meta name="description" content="">
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>letter frequency analysis</title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-        <!-- TODO make this a static asset -->
-        <link rel="stylesheet" href="https://unpkg.com/tachyons/css/tachyons.min.css">
-    </head>
-    <body class="sans-serif">
-        <h1 class="f1">letter frequency analysis</h1>
-    </body>
+  <!-- TODO make this a static asset -->
+  <link rel="stylesheet" href="https://gitcdn.link/repo/Chalarangelo/mini.css/master/dist/mini-lite.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+</head>
+<body>
+  <div class="container">
+    <div class="row col-sm-fluid col-md-6 col-md-offset-3">
+      <article>
+        <h1>letter frequency analysis</h1>
+
+        <p>Below are the results from having analyzed the <a href="https://www.anc.org/data/oanc/">Open American National Corpus</a>, a "roughly 15 million word subset of the ANC Second Release that is unrestricted in terms of usage and redistribution." It consists of both spoken and written data from a variety of sources.</p>
+
+        <section>
+          <h2>Letter Frequency <em>including digits, punctuation, and space</em></h2>
+
+          <h3>Count</h3>
+          <div class="responsive-padding responsive-margin" style="position: relative">
+            <canvas id="letter-freq-all-symbols" height="550"></canvas>
+            <script type="text/javascript">
+              var ctx = document.getElementById('letter-freq-all-symbols').getContext('2d');
+              var chart = new Chart(ctx, {
+                // The type of chart we want to create
+                type: 'horizontalBar',
+
+                // The data for our dataset
+                data: {
+                  labels: [{% for count_tuple in all_symbols_count_desc %}"{{ count_tuple[0] }}",{% endfor %}],
+                  datasets: [{
+                    label: "count",
+                    backgroundColor: 'rgba(2,119,189,0.9)',
+                    data: [{% for count_tuple in all_symbols_count_desc %}{{ count_tuple[1] }},{% endfor %}],
+                  }]
+                },
+
+                options: {
+                  legend: false,
+                  maintainAspectRatio: false
+                }
+              });
+            </script>
+          </div>
+
+          <h3>Relative Frequency</h3>
+          <div class="responsive-padding responsive-margin" style="font-family: monospace;">
+            {% for freq_tuple in all_symbols_relative_freq %}
+              {{ freq_tuple[0] }}: {{ (freq_tuple[1]*100)|round(3) }}% <br>
+            {% endfor %}
+          </div>
+        </section>
+      </article>
+    </div>
+  </div>
+</body>
 </html>
