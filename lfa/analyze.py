@@ -6,12 +6,12 @@ from typing import TextIO
 class AnalysisResults:
 
     def __init__(self):
-        self.letters     = Counter()
-        self.all_symbols = Counter()
+        self.letters = Counter()
+        self.characters = Counter()
         self.punctuation = Counter()
-        self.numbers     = Counter()
-        self.bigrams     = Counter()
-        self.trigrams    = Counter()
+        self.digits = Counter()
+        self.bigrams = Counter()
+        self.trigrams = Counter()
 
         self.words = 0
 
@@ -20,7 +20,7 @@ def analyze(stream : TextIO) -> AnalysisResults:
     pattern = re.compile(
         r"(?P<punct>[\x21-\x2f\x3a-\x40\x5b-\x60\x7b-\x7e]+)" +
         r"|(?P<word>(?:[a-zA-Z])+(?:'[a-zA-Z]+)?)" +
-        r"|(?P<number>[0-9]+)" +
+        r"|(?P<digits>[0-9]+)" +
         r"|(?P<space>\b \b)"
     )
 
@@ -31,9 +31,9 @@ def analyze(stream : TextIO) -> AnalysisResults:
 
     for match in match_iterator:
         punctuation = match.group('punct')
-        word        = match.group('word')
-        number      = match.group('number')
-        space       = match.group('space')
+        word = match.group('word')
+        digits = match.group('digits')
+        space = match.group('space')
 
         if punctuation:
             counts.punctuation.update(punctuation)
@@ -57,16 +57,16 @@ def analyze(stream : TextIO) -> AnalysisResults:
 
                     counts.trigrams[trigram] += 1
 
-        elif number:
-            counts.numbers.update(number)
+        elif digits:
+            counts.digits.update(digits)
 
         elif space:
-            counts.all_symbols['[ ]'] += 1
+            counts.characters[' '] += 1
 
     # end for match in...
 
-    counts.all_symbols.update(counts.letters)
-    counts.all_symbols['[[:punct:]]'] = sum(counts.punctuation.values())
-    counts.all_symbols['[[:digit:]]'] = sum(counts.numbers.values())
+    counts.characters.update(counts.letters)
+    counts.characters['[[:punct:]]'] = sum(counts.punctuation.values())
+    counts.characters['[[:digit:]]'] = sum(counts.digits.values())
 
     return counts
