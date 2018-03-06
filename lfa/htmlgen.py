@@ -1,5 +1,6 @@
 from .analyze import AnalysisResults
 
+from datetime import datetime
 from jinja2 import Environment, FileSystemLoader
 from collections import namedtuple
 
@@ -11,6 +12,7 @@ def htmlgen(counts: AnalysisResults, out_dir: str):
 
     with open(out_dir + '/index.html', 'w') as index_file:
         index_template.stream(
+            timestamp=datetime.now().isoformat(' '),
             word_count=format_word_count(counts.words),
             characters_chart_data=generate_characters_chart_data(counts),
             characters_relative_freq=calculate_characters_relative_frequency(counts),
