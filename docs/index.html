@@ -1,0 +1,350 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <!-- generated 2018-03-05 22:21:40.537768 -->
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>Letter Frequency Analysis</title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <link rel="stylesheet" href="assets/tachyons.min.css"/>
+  <script src="assets/echarts.common.min.js"></script>
+</head>
+<body class="sans-serif bg-white black-70">
+  <article class="pa3 ph5-ns w-60-ns">
+    <h1 class="f2 lh-title">Letter Frequency Analysis</h1>
+
+    <p class="lh-copy measure-wide">Below are the results from having analyzed 14,442,711 words in the <a href="https://www.anc.org/data/oanc/">Open American National Corpus</a>, a "subset of the ANC Second Release that is unrestricted in terms of usage and redistribution." It consists of both spoken and written data from a variety of sources.</p>
+
+    <section>
+      <h2 class="f3 mb2">Characters</h2>
+      <p class="i lh-copy mt0">Note: &amp; and # represent digits and punctuation totals, respectively.</p>
+
+      <div>
+        <div id="character-chart" style="width:100%; height:750px;"></div>
+        <script type="text/javascript">
+          var charChart = echarts.init(document.getElementById('character-chart'), 'light');
+
+          option = {
+            tooltip: {
+              trigger: 'axis',
+              axisPointer: {
+                  type: 'shadow'
+              }
+            },
+            grid: {
+              left: '0%',
+              right: '10%',
+              bottom: '3%',
+              top: '1%',
+              containLabel: true
+            },
+            xAxis: {
+              type: 'value',
+              boundaryGap: [0, 0],
+              splitNumber: 3
+            },
+            yAxis: {
+              type: 'category',
+              data: ["z", "q", "j", "x", "k", "v", "#", "b", "w", "y", "g", "f", "p", "m", "u", "c", "\u0026", "d", "l", "h", "r", "s", "n", "o", "i", "a", "t", "e", " "],
+              axisTick: {
+                alignWithLabel: true
+              }
+            },
+            series: [{
+              name: 'count',
+              type: 'bar',
+              data: [79034, 86037, 122815, 168434, 501687, 727277, 858234, 1045301, 1177144, 1329083, 1392062, 1469526, 1479766, 1760271, 2084567, 2256826, 2521287, 2541643, 2859703, 3313317, 4122762, 4548571, 4897495, 5156878, 5174648, 5618362, 6393831, 8269949, 11598730],
+              barWidth: "20px"
+            }]
+          };
+
+          charChart.setOption(option);
+        </script>
+      </div>
+
+      <h3 class="f4">Relative Frequency</h3>
+      <div class="flex flex-wrap">
+        <div class="w-two-thirds w-third-ns">
+          <h4 class="f5 mt0 ttl tracked-tight">All Characters</h4>
+          <ol class="list pl0 code">
+            
+              a: 0.067%<br>
+            
+              b: 0.013%<br>
+            
+              c: 0.027%<br>
+            
+              d: 0.030%<br>
+            
+              e: 0.099%<br>
+            
+              f: 0.018%<br>
+            
+              g: 0.017%<br>
+            
+              h: 0.040%<br>
+            
+              i: 0.062%<br>
+            
+              j: 0.001%<br>
+            
+              k: 0.006%<br>
+            
+              l: 0.034%<br>
+            
+              m: 0.021%<br>
+            
+              n: 0.059%<br>
+            
+              o: 0.062%<br>
+            
+              p: 0.018%<br>
+            
+              q: 0.001%<br>
+            
+              r: 0.049%<br>
+            
+              s: 0.054%<br>
+            
+              t: 0.077%<br>
+            
+              u: 0.025%<br>
+            
+              v: 0.009%<br>
+            
+              w: 0.014%<br>
+            
+              x: 0.002%<br>
+            
+              y: 0.016%<br>
+            
+              z: 0.001%<br>
+            
+              &nbsp;: 0.139%<br>
+            
+              punct: 0.030%<br>
+            
+              digit: 0.010%<br>
+            
+          </ol>
+        </div>
+
+        <div class="w-third">
+          <h4 class="f5 mt0 ttl tracked-tight">letters only</h4>
+          <ol class="list pl0 code">
+            
+              a: 0.082%<br>
+            
+              b: 0.015%<br>
+            
+              c: 0.033%<br>
+            
+              d: 0.037%<br>
+            
+              e: 0.121%<br>
+            
+              f: 0.021%<br>
+            
+              g: 0.020%<br>
+            
+              h: 0.048%<br>
+            
+              i: 0.075%<br>
+            
+              j: 0.002%<br>
+            
+              k: 0.007%<br>
+            
+              l: 0.042%<br>
+            
+              m: 0.026%<br>
+            
+              n: 0.071%<br>
+            
+              o: 0.075%<br>
+            
+              p: 0.022%<br>
+            
+              q: 0.001%<br>
+            
+              r: 0.060%<br>
+            
+              s: 0.066%<br>
+            
+              t: 0.093%<br>
+            
+              u: 0.030%<br>
+            
+              v: 0.011%<br>
+            
+              w: 0.017%<br>
+            
+              x: 0.002%<br>
+            
+              y: 0.019%<br>
+            
+              z: 0.001%<br>
+            
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="f3 mb2">Punctuation</h2>
+
+      <div>
+        <div id="punctuation-chart" style="width:100%; height:800px;"></div>
+        <script type="text/javascript">
+          var punctChart = echarts.init(document.getElementById('punctuation-chart'), 'light');
+
+          option = {
+            tooltip: {
+              trigger: 'axis',
+              axisPointer: {
+                  type: 'shadow'
+              }
+            },
+            grid: {
+              left: '0%',
+              right: '10%',
+              bottom: '3%',
+              top: '1%',
+              containLabel: true
+            },
+            xAxis: {
+              type: 'value',
+              boundaryGap: [0, 0],
+              splitNumber: 3
+            },
+            yAxis: {
+              type: 'category',
+              data: ["^", "{", "}", "|", "#", "@", "\\", "~", "*", "_", "\u003e", "`", "\u003c", "\u0026", "+", "!", "=", "$", "%", "?", "/", ";", "]", "[", ":", "\"", "(", ")", "\u0027", "-", ".", ","],
+              axisTick: {
+                alignWithLabel: true
+              }
+            },
+            series: [{
+              name: 'count',
+              type: 'bar',
+              data: [62, 119, 121, 343, 602, 781, 1057, 1306, 1451, 1658, 1795, 2057, 2378, 2710, 5269, 5840, 8039, 8068, 14588, 19383, 24377, 31169, 39384, 39403, 41398, 118783, 122947, 127032, 279289, 295880, 641809, 682189],
+              barWidth: "20px"
+            }]
+          };
+
+          punctChart.setOption(option);
+        </script>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="f3 mb2">Digits</h2>
+
+      <div>
+        <div id="digits-chart" style="width:100%; height:400px;"></div>
+        <script type="text/javascript">
+          var digitChart = echarts.init(document.getElementById('digits-chart'), 'light');
+
+          option = {
+            tooltip: {
+              trigger: 'axis',
+              axisPointer: {
+                  type: 'shadow'
+              }
+            },
+            grid: {
+              left: '0%',
+              right: '10%',
+              bottom: '3%',
+              top: '1%',
+              containLabel: true
+            },
+            xAxis: {
+              type: 'value',
+              boundaryGap: [0, 0],
+              splitNumber: 3
+            },
+            yAxis: {
+              type: 'category',
+              data: ["7", "8", "6", "4", "5", "9", "3", "2", "0", "1"],
+              axisTick: {
+                alignWithLabel: true
+              }
+            },
+            series: [{
+              name: 'count',
+              type: 'bar',
+              data: [42624, 44071, 47136, 61320, 71159, 73299, 74100, 118894, 148045, 177586],
+              barWidth: "20px"
+            }]
+          };
+
+          digitChart.setOption(option);
+        </script>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="f3 mb2">N-grams</h2>
+
+      <div class="flex flex-wrap">
+        <div class="w-50 w-third-ns">
+          <h3 class="f4 mt0 ttl tracked-tight">Bigrams</h3>
+          <ol class="list pl0 code">
+            
+              th: 1,640,686 <br>
+            
+              he: 1,364,267 <br>
+            
+              in: 1,289,051 <br>
+            
+              an: 1,019,992 <br>
+            
+              re: 1,009,134 <br>
+            
+              er: 1,005,070 <br>
+            
+              on: 889,389 <br>
+            
+              at: 865,851 <br>
+            
+              en: 749,905 <br>
+            
+              es: 732,170 <br>
+            
+          </ol>
+        </div>
+
+        <div class="w-50">
+          <h3 class="f4 mt0 ttl tracked-tight">Trigrams</h3>
+          <ol class="list pl0 code">
+            
+              the: 1,011,206 <br>
+            
+              and: 467,688 <br>
+            
+              ing: 436,634 <br>
+            
+              ion: 350,254 <br>
+            
+              ent: 287,032 <br>
+            
+              tio: 284,023 <br>
+            
+              hat: 262,531 <br>
+            
+              tha: 248,246 <br>
+            
+              ati: 215,976 <br>
+            
+              for: 195,839 <br>
+            
+          </ol>
+        </div>
+      </div>
+    </section>
+  </article>
+</body>
+</html>
