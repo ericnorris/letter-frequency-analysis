@@ -40,14 +40,17 @@ def generate_characters_chart_data(counts: AnalysisResults) -> ChartData:
 def calculate_characters_relative_frequency(counts: AnalysisResults) -> list:
     total = sum(counts.characters.values())
 
+    def format_percentage(count: int) -> str:
+        return "{:.3f}%".format((count / total) * 100)
+
     percentages = sorted([
-        (character, ("{:.3f}%".format(count / total)))
+        (character, format_percentage(count))
         for character, count in counts.letters.items()
     ])
 
-    percentages.append(('&nbsp;', "{:.3f}%".format(counts.characters[' '] / total)))
-    percentages.append(('punct', "{:.3f}%".format(counts.characters['[[:punct:]]'] / total)))
-    percentages.append(('digit', "{:.3f}%".format(counts.characters['[[:digit:]]'] / total)))
+    percentages.append(('&nbsp;', format_percentage(counts.characters[' '])))
+    percentages.append(('punct', format_percentage(counts.characters['[[:punct:]]'])))
+    percentages.append(('digit', format_percentage(counts.characters['[[:digit:]]'])))
 
     return percentages
 
@@ -56,7 +59,7 @@ def calculate_letters_relative_frequency(counts: AnalysisResults) -> list:
     total = sum(counts.letters.values())
 
     percentages = sorted([
-        (character, ("{:.3f}%".format(count / total)))
+        (character, ("{:.3f}%".format((count / total) * 100)))
         for character, count in counts.letters.items()
     ])
 
