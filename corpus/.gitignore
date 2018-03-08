@@ -1,0 +1,5 @@
+# ignore everything in this directory...
+*
+# ...except this file and the stripped corpus
+!.gitignore
+!OANC-1.0.1-UTF8-textonly.gz
