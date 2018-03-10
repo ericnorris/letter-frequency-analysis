@@ -1,13 +1,9 @@
 SHELL := /bin/bash
 
-.PHONY: all upgrade-module corpus-from-scratch
+.PHONY: all corpus-from-scratch
 .INTERMEDIATE: corpus/OANC-1.0.1-UTF8.zip
 
 all: docs/index.html
-
-upgrade-module: venv/bin/activate
-	source venv/bin/activate && \
-		pip install --upgrade .
 
 corpus-from-scratch: corpus/OANC-1.0.1-UTF8.zip corpus/OANC-1.0.1-UTF8-textonly.gz
 
@@ -24,7 +20,7 @@ results/oanc-counts.pickle: corpus/OANC-1.0.1-UTF8-textonly.gz venv/lfa-installe
 
 venv/lfa-installed: venv/bin/activate
 	source venv/bin/activate && \
-		{ pip freeze | grep -q "Letter-Frequency-Analysis"; } || pip install .
+		{ pip freeze | grep -q "Letter-Frequency-Analysis"; } || pip install -e .
 
 	touch venv/lfa-installed
 

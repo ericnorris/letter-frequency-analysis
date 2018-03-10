@@ -15,10 +15,6 @@ main() {
     while output=$(inotifywait ./templates ./lfa 2>/dev/null); do
         log "Got event: $output"
 
-        if [[ $output =~ "./lfa" ]]; then
-            pip install --upgrade . >/dev/null && log "Updated module"
-        fi
-
         ./bin/run.py htmlgen --input $1 --outdir $2 && log "Rendered templates"
     done
 }
